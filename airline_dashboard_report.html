@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Performance Dashboard - Comprehensive Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffeb3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.4em;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .header .date {
+            font-size: 1.1em;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #ffd700;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .subsection {
+            margin-bottom: 40px;
+        }
+
+        .subsection-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #2a5298;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .subsection-title::before {
+            content: '';
+            width: 8px;
+            height: 30px;
+            background: linear-gradient(45deg, #ffd700, #ffeb3b);
+            border-radius: 4px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        .kpi-number {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #ffd700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kpi-label {
+            font-size: 1.2em;
+            font-weight: 500;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kpi-trend {
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Insight Cards */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .insight-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .insight-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .insight-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .insight-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        /* Problem Statement Box */
+        .problem-statement {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-statement::before {
+            content: '⚠️';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            opacity: 0.3;
+        }
+
+        .problem-statement h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .problem-statement p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Data Overview */
+        .data-overview {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .data-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .data-stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .data-stat-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .data-stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .recommendation-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .recommendation-item {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .recommendation-item h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .recommendation-item p {
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        /* Charts Placeholder */
+        .chart-placeholder {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #6c757d;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            margin: 30px 0;
+            color: #6c757d;
+        }
+
+        .chart-placeholder h4 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .chart-placeholder p {
+            font-size: 1.1em;
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 50px;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer .contact {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .report-container {
+                box-shadow: none !important;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            .kpi-card::before,
+            .insight-card::before {
+                display: none;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .content {
+                padding: 30px;
+            }
+            
+            .section-title {
+                font-size: 2em;
+            }
+            
+            .kpi-grid,
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-bold { font-weight: 600; }
+        .text-large { font-size: 1.3em; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .mt-40 { margin-top: 40px; }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffeb3b 100%);
+            color: #1e3c72;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .status-critical { color: #e74c3c; font-weight: 600; }
+        .status-warning { color: #f39c12; font-weight: 600; }
+        .status-good { color: #27ae60; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Airline Performance Dashboard</h1>
+                <p class="subtitle">Comprehensive Data Analysis & Business Intelligence Report</p>
+                <div class="date">Report Generated: July 2025</div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Executive Summary -->
+            <div class="section">
+                <h2 class="section-title">Executive Summary</h2>
+                
+                <div class="problem-statement">
+                    <h3>Business Challenge</h3>
+                    <p>Our airline faces critical challenges in maintaining consistent on-time performance and minimizing flight delays across major routes, while balancing competitive ticket pricing and delivering strong customer satisfaction. This comprehensive analysis reveals significant operational inefficiencies that demand immediate strategic intervention.</p>
+                </div>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-number">14.02%</div>
+                        <div class="kpi-label">On-Time Performance</div>
+                        <div class="kpi-trend status-critical">Critical - Well Below Industry Standard</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">47.03</div>
+                        <div class="kpi-label">Avg Delay Minutes</div>
+                        <div class="kpi-trend status-warning">High Impact on Customer Experience</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">$3.78M</div>
+                        <div class="kpi-label">Total Revenue</div>
+                        <div class="kpi-trend status-good">Strong Revenue Base</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">3.01</div>
+                        <div class="kpi-label">Customer Rating</div>
+                        <div class="kpi-trend status-warning">Below Satisfaction Threshold</div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Key Findings</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">🚨</span>
+                            <div class="insight-title">Critical Performance Gap</div>
+                            <div class="insight-text">On-time performance of only 14.02% represents a severe operational crisis, significantly below industry standards and directly impacting customer satisfaction and revenue.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">💰</span>
+                            <div class="insight-title">Revenue Optimization Opportunity</div>
+                            <div class="insight-text">Despite performance challenges, strong revenue base of $3.78M indicates market demand, with significant opportunity for pricing strategy refinement.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">📊</span>
+                            <div class="insight-title">Data-Driven Insights</div>
+                            <div class="insight-text">Analysis of 10,365+ flight records reveals specific patterns in delays, pricing, and performance across airlines, routes, and seasonal variations.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Overview -->
+            <div class="section">
+                <h2 class="section-title">Dataset Analysis</h2>
+                
+                <div class="data-overview">
+                    <h3 class="text-large mb-20">Comprehensive Data Foundation</h3>
+                    <p>This analysis is based on extensive flight operations data covering multiple airlines, routes, and performance metrics across Canadian aviation markets.</p>
+                    
+                    <div class="data-stats">
+                        <div class="data-stat">
+                            <div class="data-stat-number">10,365</div>
+                            <div class="data-stat-label">Flight Records</div>
+                        </div>
+                        <div class="data-stat">
+                            <div class="data-stat-number">16</div>
+                            <div class="data-stat-label">Data Fields</div>
+                        </div>
+                        <div class="data-stat">
+                            <div class="data-stat-number">6</div>
+                            <div class="data-stat-label">Major Airlines</div>
+                        </div>
+                        <div class="data-stat">
+                            <div class="data-stat-number">6</div>
+                            <div class="data-stat-label">Canadian Cities</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Data Quality & Processing</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">🔍</span>
+                            <div class="insight-title">Data Cleaning</div>
+                            <div class="insight-text">Processed missing values, removed duplicates (~20 records), and standardized airline names with leading/trailing spaces for accurate analysis.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">📈</span>
+                            <div class="insight-title">Key Metrics</div>
+                            <div class="insight-text">Flight performance, pricing data, customer satisfaction scores, operational delays, route analysis, and aircraft classification.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">🎯</span>
+                            <div class="insight-title">Analysis Focus</div>
+                            <div class="insight-text">Multi-dimensional analysis across airlines, cities, flight classes, seasonal patterns, and customer experience factors.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Analysis -->
+            <div class="section">
+                <h2 class="section-title">Performance Analysis</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">Airline Performance Comparison</h3>
+                    <div class="chart-placeholder">
+                        <h4>📊 Average Delay Minutes by Airline</h4>
+                        <p>Interactive chart showing delay performance across WestJet, Delta, American Airlines, United, and Air Canada with significant variance in operational efficiency.</p>
+                    </div>
+                    
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">✈️</span>
+                            <div class="insight-title">Airline Variance</div>
+                            <div class="insight-text">Significant differences in delay patterns across airlines, with some carriers consistently underperforming in punctuality metrics.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">🕐</span>
+                            <div class="insight-title">On-Time vs Delayed</div>
+                            <div class="insight-text">Only 14.02% on-time performance (0.51K flights) vs 85.98% delayed flights (3.14K flights) indicates systemic operational issues.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Route & Geographic Analysis</h3>
+                    <div class="chart-placeholder">
+                        <h4>🗺️ Delays by City and Airline</h4>
+                        <p>Heat map visualization showing delay patterns across Calgary, Montreal, Vancouver, Ottawa, Edmonton, and Toronto with airline-specific performance variations.</p>
+                    </div>
+                    
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">🏙️</span>
+                            <div class="insight-title">City-Specific Challenges</div>
+                            <div class="insight-text">Major Canadian cities show varying delay patterns, indicating infrastructure, weather, or operational differences affecting performance.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">🎯</span>
+                            <div class="insight-title">Route Optimization</div>
+                            <div class="insight-text">Specific routes consistently underperform, suggesting need for targeted operational improvements and resource allocation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue & Pricing Analysis -->
+            <div class="section">
+                <h2 class="section-title">Revenue & Pricing Analysis</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">Pricing Strategy Insights</h3>
+                    <div class="chart-placeholder">
+                        <h4>💰 Average Ticket Price by Month and Class</h4>
+                        <p>Monthly pricing trends across different service classes showing seasonal variations and pricing optimization opportunities.</p>
+                    </div>
+                    
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-number">$1.04K</div>
+                            <div class="kpi-label">Average Ticket Price</div>
+                            <div class="kpi-trend">Competitive Pricing Range</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-number">$3.78M</div>
+                            <div class="kpi-label">Total Revenue</div>
+                            <div class="kpi-trend">Strong Market Position</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">Passenger Volume Trends</h3>
+                    <div class="chart-placeholder">
+                        <h4>👥 Sum of Passenger Count by Month</h4>
+                        <p>Monthly passenger volume trends showing seasonal demand patterns for capacity planning and revenue forecasting.</p>
+                    </div>
+                    
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">📈</span>
+                            <div class="insight-title">Seasonal Patterns</div>
+                            <div class="insight-text">Monthly passenger count variations reveal seasonal demand cycles that can inform dynamic pricing strategies and capacity planning.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">💡</span>
+                            <div class="insight-title">Revenue Optimization</div>
+                            <div class="insight-text">Strong revenue base indicates market demand exists despite performance issues, suggesting pricing power for operational improvements.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Experience -->
+            <div class="section">
+                <h2 class="section-title">Customer Experience Analysis</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">Customer Satisfaction Metrics</h3>
+                    <div class="chart-placeholder">
+                        <h4>⭐ Customer Rating by Airline</h4>
+                        <p>Comparative customer satisfaction scores across airlines showing correlation between operational performance and customer experience.</p>
+                    </div>
+                    
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">😟</span>
+                            <div class="insight-title">Below-Average Satisfaction</div>
+                            <div class="insight-text">Average customer rating of 3.01 indicates dissatisfaction directly correlating with poor on-time performance and operational delays.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">🔗</span>
+                            <div class="insight-title">Performance-Satisfaction Link</div>
+                            <div class="insight-text">Clear correlation between airline delay performance and customer satisfaction scores, emphasizing need for operational excellence.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategic Recommendations -->
+            <div class="section">
+                <h2 class="section-title">Strategic Recommendations</h2>
+                
+                <div class="recommendations">
+                    <h3 class="text-large mb-20">Immediate Action Plan</h3>
+                    <p class="mb-30">Based on comprehensive data analysis, we recommend a multi-pronged approach to address critical performance gaps and optimize revenue opportunities.</p>
+                    
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <h4>🚨 Operational Excellence Initiative</h4>
+                            <p>Implement immediate delay reduction strategies focusing on worst-performing routes and airlines. Target 50% improvement in on-time performance within 6 months.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>💰 Dynamic Pricing Strategy</h4>
+                            <p>Develop data-driven pricing models based on seasonal trends, route performance, and customer demand patterns to optimize revenue per flight.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>📊 Real-Time Monitoring</h4>
+                            <p>Establish continuous KPI tracking dashboard with automated alerts for performance degradation and proactive intervention capabilities.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>🎯 Customer Experience Focus</h4>
+                            <p>Implement customer satisfaction improvement program directly tied to operational performance metrics and service quality standards.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">Implementation Roadmap</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">📅</span>
+                            <div class="insight-title">Phase 1: Immediate (0-3 months)</div>
+                            <div class="insight-text">Deploy performance monitoring dashboard, identify critical delay factors, implement quick-win operational improvements.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">🎯</span>
+                            <div class="insight-title">Phase 2: Strategic (3-6 months)</div>
+                            <div class="insight-text">Roll out dynamic pricing system, optimize route schedules, implement customer experience enhancement programs.</div>
+                        </div>
+                        <div class="insight-card">
+                            <span class="insight-icon">📈</span>
+                            <div class="insight-title">Phase 3: Optimization (6-12 months)</div>
+                            <div class="insight-text">Achieve target performance metrics, expand successful strategies, implement advanced predictive analytics for proactive management.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Impact -->
+            <div class="section">
+                <h2 class="section-title">Expected Business Impact</h2>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-number">50%</div>
+                        <div class="kpi-label">On-Time Performance</div>
+                        <div class="kpi-trend">Target Improvement</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">25%</div>
+                        <div class="kpi-label">Revenue Increase</div>
+                        <div class="kpi-trend">Through Optimization</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">4.0+</div>
+                        <div class="kpi-label">Customer Rating</div>
+                        <div class="kpi-trend">Satisfaction Target</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-number">15%</div>
+                        <div class="kpi-label">Cost Reduction</div>
+                        <div class="kpi-trend">Operational Efficiency</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">Long-term Value Creation</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <span class="insight-icon">🏆</span>
+                            <div class="insight-title">Competitive Advantage</div>
+                            <div class="insight-text">Improved operational performance will differentiate airline
