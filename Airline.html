@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Airline Performance Analytics Dashboard - Project Report</title>
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.7;
+      margin: 0;
+      padding: 30px;
+    }
+    h1, h2, h3 {
+      color: #ffa500;
+    }
+    p {
+      margin-bottom: 12px;
+    }
+    ul {
+      margin-top: 8px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    code {
+      background: #333;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #00ffc8;
+    }
+    img {
+      border: 2px solid #ffa500;
+      margin-top: 15px;
+      max-width: 100%;
+    }
+    .section {
+      margin-bottom: 35px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Airline Performance Analytics Dashboard</h1>
+  <h3>Project Report | Built with Power BI, DAX, Power Query, Excel</h3>
+
+  <div class="section">
+    <h2>Project Overview</h2>
+    <p>
+      This dashboard project was developed to monitor, evaluate, and visualize airline performance metrics across multiple carriers. Using Power BI's interactive capabilities, the dashboard consolidates key performance indicators (KPIs) such as <strong>on-time performance, revenue, delays, ticket prices, and customer ratings</strong>. It provides real-time insights for stakeholders such as airline operators, analysts, and customer experience teams.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Objectives</h2>
+    <ul>
+      <li>Visualize airline operational efficiency and identify delay patterns by city and carrier.</li>
+      <li>Analyze revenue and ticket pricing trends by month and class.</li>
+      <li>Understand customer sentiment through average ratings by airline.</li>
+      <li>Enable business users to filter and compare data using intuitive slicers and visuals.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Data Sources & Tools</h2>
+    <ul>
+      <li><strong>Data Format:</strong> Excel files containing flight data, delay minutes, ratings, revenue, and ticket prices.</li>
+      <li><strong>ETL Process:</strong> Cleaned and transformed using Power Query (M Language).</li>
+      <li><strong>Data Modeling:</strong> Star schema with fact and dimension tables for Airlines, Flights, Locations, and Calendar.</li>
+      <li><strong>Tools Used:</strong> Power BI, DAX, Power Query, Excel.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Key Features & Functionalities</h2>
+    <ul>
+      <li><strong>Interactive Slicers:</strong> Filter by Airline, Ticket Price, Class, and City.</li>
+      <li><strong>Dynamic KPIs:</strong> Cards display metrics like Total Revenue ($3.78M), Avg. Ticket Price ($1.04K), On-Time Performance (14.02%), and Avg. Delay Minutes (47.03 mins).</li>
+      <li><strong>Comparative Visuals:</strong> Multi-series charts showing delays by city and airline, ticket price trends by class and month, and customer ratings per carrier.</li>
+      <li><strong>Passenger Analysis:</strong> Monthly passenger trends and flight count distributions highlight seasonality and airline activity levels.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>DAX Measures Implemented</h2>
+    <ul>
+      <li><code>Total Revenue = SUM('Flights'[Ticket_Price])</code></li>
+      <li><code>On-Time Performance % = DIVIDE([Flights_On_Time], [Total_Flights])</code></li>
+      <li><code>Avg. Delay = AVERAGE('Flights'[Delay_Minutes])</code></li>
+      <li><code>Avg. Ticket Price = AVERAGE('Flights'[Ticket_Price])</code></li>
+      <li><code>Avg. Rating = AVERAGE('Flights'[Customer_Rating])</code></li>
+      <li><code>Monthly Passenger Count = SUM('Flights'[Passenger_Count])</code></li>
+    </ul>
+    <p>These measures were optimized for performance and used throughout charts and KPI cards.</p>
+  </div>
+
+  <div class="section">
+    <h2>Power Query Transformations</h2>
+    <ul>
+      <li>Normalized city and airline names.</li>
+      <li>Filtered out null or erroneous values in ratings, prices, and delay data.</li>
+      <li>Generated calculated columns like <code>Month_Name</code> and <code>Class_Category</code>.</li>
+      <li>Merged multiple Excel sources and removed duplicates during load.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Insights & Outcomes</h2>
+    <ul>
+      <li>Only <strong>14.02%</strong> of flights were on time, revealing poor time management across carriers.</li>
+      <li>Montreal and Vancouver experienced the highest delays; city-specific performance issues identified.</li>
+      <li><strong>WestJet</strong> had the highest average delay minutes, while <strong>Delta</strong> had the lowest customer ratings.</li>
+      <li>Ticket prices were highest in April and September; possible correlation with seasonal demand.</li>
+      <li>Dashboards supported strategic decisions for route planning, pricing optimization, and service improvements.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Visualization Screenshot</h2>
+    <img src="Airlines.png" alt="Airline Performance Dashboard">
+  </div>
+
+  <div class="section">
+    <h2>Conclusion</h2>
+    <p>
+      This project showcases how an integrated data analytics solution can be used to measure, monitor, and enhance operational KPIs in the airline industry. The use of DAX for advanced metrics and Power BI’s interactive dashboards enabled stakeholders to gain timely insights and act upon critical performance indicators.
+    </p>
+    <p>
+      The project directly demonstrates my capabilities in <strong>dashboard development, data modeling, ETL, DAX logic, and cross-functional metric analysis</strong>, making it a strong portfolio asset for roles in Business Intelligence and Data Analytics.
+    </p>
+  </div>
+
+</body>
+</html>
 
